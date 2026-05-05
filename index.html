@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Biz Pitching Event 2026 — สมัครเข้าร่วม</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f4f8; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+
+  .card { background: #fff; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.12); width: 100%; max-width: 640px; overflow: hidden; }
+
+  .header { background: linear-gradient(135deg, #1a56db, #6c3fc5); padding: 28px 32px; color: #fff; }
+  .header h1 { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+  .header p  { font-size: 13px; opacity: 0.85; }
+
+  .progress-bar { background: rgba(255,255,255,0.25); height: 4px; border-radius: 2px; margin-top: 16px; }
+  .progress-fill { background: #fff; height: 4px; border-radius: 2px; transition: width 0.4s ease; }
+
+  .steps-label { display: flex; justify-content: space-between; margin-top: 8px; font-size: 11px; opacity: 0.75; }
+
+  .body { padding: 32px; }
+
+  .step { display: none; }
+  .step.active { display: block; animation: fadeIn 0.3s ease; }
+  @keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+
+  .step-title { font-size: 17px; font-weight: 700; color: #1e293b; margin-bottom: 6px; }
+  .step-desc  { font-size: 13px; color: #64748b; margin-bottom: 20px; line-height: 1.5; }
+
+  label { display: block; font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 6px; }
+  input, textarea, select { width: 100%; padding: 10px 14px; border: 1.5px solid #e2e8f0; border-radius: 10px; font-size: 14px; color: #1e293b; transition: border-color 0.2s; outline: none; font-family: inherit; background: #f8fafc; }
+  input:focus, textarea:focus, select:focus { border-color: #1a56db; background: #fff; }
+  textarea { resize: vertical; min-height: 90px; }
+
+  .option-group { display: flex; gap: 10px; flex-wrap: wrap; }
+  .option-btn { flex: 1; min-width: 140px; padding: 14px 12px; border: 2px solid #e2e8f0; border-radius: 12px; background: #f8fafc; cursor: pointer; text-align: center; font-size: 13px; font-weight: 600; color: #475569; transition: all 0.2s; }
+  .option-btn:hover { border-color: #1a56db; color: #1a56db; background: #eff6ff; }
+  .option-btn.selected { border-color: #1a56db; background: #eff6ff; color: #1a56db; }
+  .option-btn .icon { font-size: 22px; display: block; margin-bottom: 6px; }
+
+  .member-card { background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 16px; margin-bottom: 12px; }
+  .member-card .member-title { font-size: 13px; font-weight: 700; color: #1a56db; margin-bottom: 12px; }
+  .member-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .member-grid .full { grid-column: 1 / -1; }
+
+  .add-member-btn { width: 100%; padding: 10px; border: 2px dashed #cbd5e1; border-radius: 10px; background: transparent; color: #64748b; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+  .add-member-btn:hover { border-color: #1a56db; color: #1a56db; }
+
+  .remove-btn { float: right; background: none; border: none; color: #ef4444; font-size: 18px; cursor: pointer; line-height: 1; }
+
+  .summary-box { background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+  .summary-row { display: flex; gap: 12px; padding: 8px 0; border-bottom: 1px solid #f1f5f9; font-size: 14px; }
+  .summary-row:last-child { border-bottom: none; }
+  .summary-label { font-weight: 600; color: #64748b; min-width: 110px; }
+  .summary-value { color: #1e293b; flex: 1; }
+  .summary-members { margin-top: 8px; }
+  .member-tag { display: inline-block; background: #eff6ff; color: #1a56db; border-radius: 20px; padding: 3px 10px; font-size: 12px; margin: 3px 3px 0 0; }
+
+  .nav { display: flex; gap: 10px; margin-top: 24px; }
+  .btn-back { flex: 1; padding: 12px; border: 2px solid #e2e8f0; border-radius: 10px; background: #fff; color: #64748b; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+  .btn-back:hover { border-color: #94a3b8; }
+  .btn-next { flex: 2; padding: 12px; border: none; border-radius: 10px; background: linear-gradient(135deg, #1a56db, #6c3fc5); color: #fff; font-size: 14px; font-weight: 700; cursor: pointer; transition: opacity 0.2s; }
+  .btn-next:hover { opacity: 0.9; }
+  .btn-next:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .success { text-align: center; padding: 20px 0; }
+  .success .icon-big { font-size: 64px; margin-bottom: 16px; }
+  .success h2 { font-size: 22px; font-weight: 700; color: #1e293b; margin-bottom: 8px; }
+  .success p { color: #64748b; font-size: 14px; line-height: 1.6; }
+  .submission-id { display: inline-block; margin-top: 16px; background: #eff6ff; color: #1a56db; border-radius: 8px; padding: 8px 18px; font-weight: 700; font-size: 15px; }
+
+  .error-msg { color: #ef4444; font-size: 12px; margin-top: 4px; display: none; }
+  input.error, textarea.error, select.error { border-color: #ef4444; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="header">
+    <h1>🚀 Biz Pitching Event 2026</h1>
+    <p>พื้นที่ปล่อยของเพื่อสร้าง Impact ให้องค์กร</p>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:16%"></div></div>
+    <div class="steps-label"><span id="stepLabel">ขั้นตอน 1 / 6</span><span id="stepName">หมวดหมู่</span></div>
+  </div>
+
+  <div class="body">
+
+    <!-- Step 1: Category -->
+    <div class="step active" id="step1">
+      <div class="step-title">ไอเดียของคุณอยู่ในหมวดไหน?</div>
+      <div class="step-desc">เลือกหมวดหมู่ที่ตรงกับโครงการที่คุณอยากนำเสนอมากที่สุด</div>
+      <div class="option-group">
+        <div class="option-btn" onclick="selectOption('category','AI Transformation',this)">
+          <span class="icon">🤖</span>AI Transformation
+        </div>
+        <div class="option-btn" onclick="selectOption('category','Process Improvement (Non-AI)',this)">
+          <span class="icon">⚙️</span>Process Improvement<br>(Non-AI)
+        </div>
+      </div>
+      <div class="error-msg" id="err-category">กรุณาเลือกหมวดหมู่ครับ</div>
+      <div class="nav">
+        <button class="btn-next" onclick="nextStep(1)">ถัดไป →</button>
+      </div>
+    </div>
+
+    <!-- Step 2: Project Title -->
+    <div class="step" id="step2">
+      <div class="step-title">ชื่อโครงการของคุณคืออะไร?</div>
+      <div class="step-desc">ตั้งชื่อให้สั้น กระชับ และฟังแล้วว้าว! ครับ</div>
+      <label>ชื่อโครงการ</label>
+      <input type="text" id="projectTitle" placeholder="เช่น ระบบจัดการเอกสารอัตโนมัติ">
+      <div class="error-msg" id="err-projectTitle">กรุณาระบุชื่อโครงการครับ</div>
+      <div class="nav">
+        <button class="btn-back" onclick="prevStep(2)">← ย้อนกลับ</button>
+        <button class="btn-next" onclick="nextStep(2)">ถัดไป →</button>
+      </div>
+    </div>
+
+    <!-- Step 3: Team -->
+    <div class="step" id="step3">
+      <div class="step-title">รูปแบบทีมและข้อมูลสมาชิก</div>
+      <div class="step-desc">เลือกรูปแบบทีม แล้วกรอกข้อมูลสมาชิกทุกคนครับ</div>
+      <div class="option-group" style="margin-bottom:20px">
+        <div class="option-btn" onclick="selectTeam('คู่ (2 คน)',2,this)">
+          <span class="icon">👥</span>มาเป็นคู่<br>(2 คน)
+        </div>
+        <div class="option-btn" onclick="selectTeam('ทีม (3-5 คน)',3,this)">
+          <span class="icon">👨‍👩‍👧‍👦</span>มาเป็นทีม<br>(3-5 คน)
+        </div>
+      </div>
+      <div class="error-msg" id="err-team">กรุณาเลือกรูปแบบทีมครับ</div>
+      <div id="membersContainer"></div>
+      <button class="add-member-btn" id="addMemberBtn" style="display:none" onclick="addMember()">+ เพิ่มสมาชิก</button>
+      <div class="nav">
+        <button class="btn-back" onclick="prevStep(3)">← ย้อนกลับ</button>
+        <button class="btn-next" onclick="nextStep(3)">ถัดไป →</button>
+      </div>
+    </div>
+
+    <!-- Step 4: Pain Point -->
+    <div class="step" id="step4">
+      <div class="step-title">ปัญหาหลักที่พบคืออะไร?</div>
+      <div class="step-desc">อธิบายปัญหาที่ทำให้การทำงานติดขัด หรือเป็นต้นทุนที่ซ่อนอยู่ในปัจจุบันครับ</div>
+      <label>Pain Point</label>
+      <textarea id="painPoint" placeholder="เช่น พนักงานใช้เวลาหาข้อมูลในแมนนวลนานเกินไป วันละ 1-2 ชั่วโมง"></textarea>
+      <div class="error-msg" id="err-painPoint">กรุณาระบุปัญหาที่พบครับ</div>
+      <div class="nav">
+        <button class="btn-back" onclick="prevStep(4)">← ย้อนกลับ</button>
+        <button class="btn-next" onclick="nextStep(4)">ถัดไป →</button>
+      </div>
+    </div>
+
+    <!-- Step 5: Impact -->
+    <div class="step" id="step5">
+      <div class="step-title">ถ้าแก้ปัญหาได้ จะสร้าง Impact อะไร?</div>
+      <div class="step-desc">ระบุว่าโครงการนี้จะช่วยประหยัดเวลา ลดความผิดพลาด หรือสร้างคุณค่าอะไรให้บริษัทได้บ้างครับ</div>
+      <label>Impact & Value</label>
+      <textarea id="impactValue" placeholder="เช่น ลดเวลาการตอบคำถามพนักงานลง 80% และช่วยให้ข้อมูลแม่นยำขึ้น 100%"></textarea>
+      <div class="error-msg" id="err-impactValue">กรุณาระบุ Impact ที่คาดหวังครับ</div>
+      <div class="nav">
+        <button class="btn-back" onclick="prevStep(5)">← ย้อนกลับ</button>
+        <button class="btn-next" onclick="nextStep(5)">ถัดไป →</button>
+      </div>
+    </div>
+
+    <!-- Step 6: Summary & Confirm -->
+    <div class="step" id="step6">
+      <div class="step-title">ยืนยันข้อมูลก่อนส่ง</div>
+      <div class="step-desc">ตรวจสอบข้อมูลให้ครบถ้วน แล้วกดยืนยันการสมัครได้เลยครับ</div>
+      <div class="summary-box" id="summaryBox"></div>
+      <div class="nav">
+        <button class="btn-back" onclick="prevStep(6)">← แก้ไข</button>
+        <button class="btn-next" id="submitBtn" onclick="submitForm()">✅ ยืนยันการสมัคร</button>
+      </div>
+    </div>
+
+    <!-- Success -->
+    <div class="step" id="stepSuccess">
+      <div class="success">
+        <div class="icon-big">🎉</div>
+        <h2>สมัครสำเร็จแล้วครับ!</h2>
+        <p>ข้อมูลของคุณถูกบันทึกเรียบร้อยแล้ว<br>ทีมงานจะติดต่อกลับทาง Email ที่ให้ไว้ครับ</p>
+        <div class="submission-id" id="submissionIdBox"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const WEBHOOK_URL = 'https://cman-aiadmin.app.n8n.cloud/webhook/biz-pitching';
+const STEPS = 6;
+const STEP_NAMES = ['หมวดหมู่','ชื่อโครงการ','ทีม','Pain Point','Impact','ยืนยัน'];
+let currentStep = 1;
+let formData = { category: '', projectTitle: '', teamFormat: '', members: [], painPoint: '', impactValue: '' };
+let maxMembers = 2;
+
+function updateProgress() {
+  const pct = (currentStep / STEPS) * 100;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('stepLabel').textContent = `ขั้นตอน ${currentStep} / ${STEPS}`;
+  document.getElementById('stepName').textContent = STEP_NAMES[currentStep - 1];
+}
+
+function showStep(n) {
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+  const el = document.getElementById(n === 'success' ? 'stepSuccess' : 'step' + n);
+  if (el) el.classList.add('active');
+  currentStep = typeof n === 'number' ? n : STEPS;
+  updateProgress();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function nextStep(from) {
+  if (!validateStep(from)) return;
+  collectStep(from);
+  if (from === 5) buildSummary();
+  showStep(from + 1);
+}
+function prevStep(from) { showStep(from - 1); }
+
+function selectOption(field, value, el) {
+  document.querySelectorAll(`[onclick*="selectOption('${field}'"]`).forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  formData[field] = value;
+  document.getElementById('err-category').style.display = 'none';
+}
+
+function selectTeam(format, minMembers, el) {
+  document.querySelectorAll(`[onclick*="selectTeam("]`).forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  formData.teamFormat = format;
+  maxMembers = format.includes('คู่') ? 2 : 5;
+  document.getElementById('err-team').style.display = 'none';
+  renderMembers(minMembers);
+  document.getElementById('addMemberBtn').style.display = format.includes('ทีม') ? 'block' : 'none';
+}
+
+function renderMembers(count) {
+  const container = document.getElementById('membersContainer');
+  container.innerHTML = '';
+  formData.members = [];
+  for (let i = 0; i < count; i++) addMemberCard(i);
+}
+
+function addMember() {
+  const count = document.querySelectorAll('.member-card').length;
+  if (count >= maxMembers) return;
+  addMemberCard(count);
+  if (document.querySelectorAll('.member-card').length >= maxMembers)
+    document.getElementById('addMemberBtn').style.display = 'none';
+}
+
+function addMemberCard(i) {
+  const roles = ['Lead','Member','Member','Member','Member'];
+  const div = document.createElement('div');
+  div.className = 'member-card';
+  div.id = 'member-' + i;
+  div.innerHTML = `
+    <div class="member-title">
+      สมาชิกคนที่ ${i+1} ${i===0?'(หัวหน้าทีม)':''}
+      ${i>1?`<button class="remove-btn" onclick="removeMember(${i})">✕</button>`:''}
+    </div>
+    <div class="member-grid">
+      <div><label>ชื่อ</label><input type="text" id="m${i}_firstName" placeholder="ชื่อ"></div>
+      <div><label>นามสกุล</label><input type="text" id="m${i}_lastName" placeholder="นามสกุล"></div>
+      <div class="full"><label>Email</label><input type="email" id="m${i}_email" placeholder="email@company.com"></div>
+      <div><label>เบอร์โทร</label><input type="text" id="m${i}_phone" placeholder="08XXXXXXXX"></div>
+      <div><label>แผนก</label><input type="text" id="m${i}_department" placeholder="เช่น IT, HR"></div>
+    </div>`;
+  document.getElementById('membersContainer').appendChild(div);
+}
+
+function removeMember(i) {
+  document.getElementById('member-' + i)?.remove();
+  document.getElementById('addMemberBtn').style.display = 'block';
+}
+
+function collectStep(step) {
+  if (step === 2) formData.projectTitle = document.getElementById('projectTitle').value.trim();
+  if (step === 3) {
+    formData.members = [];
+    document.querySelectorAll('.member-card').forEach((card, i) => {
+      const idx = card.id.replace('member-','');
+      formData.members.push({
+        firstName: document.getElementById('m'+idx+'_firstName')?.value.trim() || '',
+        lastName:  document.getElementById('m'+idx+'_lastName')?.value.trim() || '',
+        email:     document.getElementById('m'+idx+'_email')?.value.trim() || '',
+        phone:     document.getElementById('m'+idx+'_phone')?.value.trim() || '',
+        department:document.getElementById('m'+idx+'_department')?.value.trim() || '',
+        role:      i === 0 ? 'Lead' : 'Member'
+      });
+    });
+  }
+  if (step === 4) formData.painPoint = document.getElementById('painPoint').value.trim();
+  if (step === 5) formData.impactValue = document.getElementById('impactValue').value.trim();
+}
+
+function validateStep(step) {
+  if (step === 1) {
+    if (!formData.category) { document.getElementById('err-category').style.display='block'; return false; }
+  }
+  if (step === 2) {
+    const v = document.getElementById('projectTitle').value.trim();
+    if (!v) { showErr('projectTitle'); return false; } clearErr('projectTitle');
+  }
+  if (step === 3) {
+    if (!formData.teamFormat) { document.getElementById('err-team').style.display='block'; return false; }
+    let ok = true;
+    document.querySelectorAll('.member-card').forEach((card, i) => {
+      const idx = card.id.replace('member-','');
+      const fn = document.getElementById('m'+idx+'_firstName')?.value.trim();
+      const em = document.getElementById('m'+idx+'_email')?.value.trim();
+      if (!fn || !em) ok = false;
+    });
+    if (!ok) { alert('กรุณากรอกชื่อและ Email ของสมาชิกทุกคนครับ'); return false; }
+  }
+  if (step === 4) {
+    if (!document.getElementById('painPoint').value.trim()) { showErr('painPoint'); return false; } clearErr('painPoint');
+  }
+  if (step === 5) {
+    if (!document.getElementById('impactValue').value.trim()) { showErr('impactValue'); return false; } clearErr('impactValue');
+  }
+  return true;
+}
+
+function showErr(id) { document.getElementById(id).classList.add('error'); document.getElementById('err-'+id).style.display='block'; }
+function clearErr(id) { document.getElementById(id).classList.remove('error'); document.getElementById('err-'+id).style.display='none'; }
+
+function buildSummary() {
+  const memberTags = formData.members.map(m => `<span class="member-tag">${m.firstName} ${m.lastName}</span>`).join('');
+  document.getElementById('summaryBox').innerHTML = `
+    <div class="summary-row"><span class="summary-label">หมวดหมู่</span><span class="summary-value">${formData.category}</span></div>
+    <div class="summary-row"><span class="summary-label">ชื่อโครงการ</span><span class="summary-value">${formData.projectTitle}</span></div>
+    <div class="summary-row"><span class="summary-label">รูปแบบทีม</span><span class="summary-value">${formData.teamFormat}</span></div>
+    <div class="summary-row"><span class="summary-label">สมาชิก</span><span class="summary-value"><div class="summary-members">${memberTags}</div></span></div>
+    <div class="summary-row"><span class="summary-label">Pain Point</span><span class="summary-value">${formData.painPoint}</span></div>
+    <div class="summary-row"><span class="summary-label">Impact</span><span class="summary-value">${formData.impactValue}</span></div>`;
+}
+
+async function submitForm() {
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.textContent = '⏳ กำลังส่งข้อมูล...';
+  try {
+    const res = await fetch(WEBHOOK_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        category:     formData.category,
+        projectTitle: formData.projectTitle,
+        teamFormat:   formData.teamFormat,
+        painPoint:    formData.painPoint,
+        impactValue:  formData.impactValue,
+        members:      formData.members
+      })
+    });
+    const data = await res.json();
+    document.getElementById('submissionIdBox').textContent = '🎫 หมายเลขการสมัคร: ' + (data.submissionId || 'N/A');
+    document.getElementById('progressFill').style.width = '100%';
+    document.getElementById('stepLabel').textContent = 'เสร็จสมบูรณ์ ✅';
+    document.getElementById('stepName').textContent = 'บันทึกข้อมูลสำเร็จ';
+    showStep('success');
+  } catch(e) {
+    alert('❌ เกิดข้อผิดพลาดในการส่งข้อมูล กรุณาลองใหม่อีกครั้งครับ');
+    btn.disabled = false;
+    btn.textContent = '✅ ยืนยันการสมัคร';
+  }
+}
+
+updateProgress();
+</script>
+</body>
+</html>
